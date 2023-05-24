@@ -17,15 +17,17 @@
 import json
 from collections import Counter, defaultdict
 import math
+import argparse
 
 class EvaluationLexicons:
 
     def __init__(self, TARGET_FILE_PATH, GOLD_LEXICON_PATH, PRED_LEXICON_PATH,\
-        top_k = 2, filter_freq_less_than = 2) -> None:
+        top_k = 2, top_k_gold = 2, filter_freq_less_than = 2) -> None:
         self.TARGET_FILE_PATH = TARGET_FILE_PATH
         self.GOLD_LEXICON_PATH = GOLD_LEXICON_PATH
         self.PRED_LEXICON_PATH = PRED_LEXICON_PATH
         self.top_k = top_k
+        self.top_k_gold = top_k_gold
         self.filter_freq_less_than = filter_freq_less_than
         self.dataset_words = dict()
 
@@ -74,12 +76,11 @@ class EvaluationLexicons:
             words_scores = sorted(self.pred_lex[word].items(), key=lambda x: x[1], reverse=True)[:self.top_k]
             top_preds = {w[0] for w in words_scores}
 
-            # CHOOSE WHETHER TO TAKE top_k OF GOLD LEXICON
-            global hrl
-            if hrl:
-                gold_words_scores = sorted(self.gold_lex[word].items(), key=lambda x: x[1], reverse=True)
+            if self.top_k_gold:
+                gold_words_scores = sorted(self.gold_lex[word].items(), key=lambda x: x[1], reverse=True)[:self.top_k_gold]
             else:
-                gold_words_scores = sorted(self.gold_lex[word].items(), key=lambda x: x[1], reverse=True)[:self.top_k]
+                gold_words_scores = sorted(self.gold_lex[word].items(), key=lambda x: x[1], reverse=True)
+
             gold_preds = {w[0] for w in gold_words_scores}
 
             common = top_preds.intersection(gold_preds)
@@ -358,8 +359,6 @@ class EvaluationLexicons:
 
 if __name__=="__main__":
     print("Starting!")
-    global hrl
-    hrl = True
     # TARGET_FILE_PATH = "../data/monolingual/all/bho.txt"
     # GOLD_LEXICON_PATH = "get_eval_lexicon/lexicons/target2hin/bho2hin.json"
     # PRED_LEXICON_PATH = "../bli/lexicons/bho/CSCBLI_unsup.bho.ft_300.ct_768.csls.json"
@@ -403,12 +402,19 @@ if __name__=="__main__":
     # PRED_LEXICON_PATH = "../bli/lexicons/nep/nep.ft_300.csls.json"
     # PRED_LEXICON_PATH = "../bli/lexicons/nep/CSCBLI_unsup.nep.ft_300.ct_768.csls.json"
 
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--GOLD_LEXICON_PATH", type=str, required=True, help="Path to gold lexicon")
+    parser.add_argument("--PRED_LEXICON_PATH", type=str, required=True, help="Path to predicted lexicon")
+    parser.add_argument("--top_k_pred", type=int, required=False, default=None, help="Top k predictions from pred lexicon to consider")
+    parser.add_argument("--top_k_gold", type=int, required=False, default=2, help="Top k predictions from gold lexicon to consider")
+    parser.add_argument("--filter_freq_less_than", type=int, required=False, default=2, help="Filter words that occur less than this number of times in the dataset")
+    parser.add_argument("--TARGET_FILE_PATH", type=str, required=True, help="Path to monolingual file")
 
-    top_k = 2
-    filter_freq_less_than = 2
+    args = parser.parse_args()
 
-    eval_obj = EvaluationLexicons(TARGET_FILE_PATH, GOLD_LEXICON_PATH, PRED_LEXICON_PATH,\
-        top_k = top_k, filter_freq_less_than = filter_freq_less_than)
+
+    eval_obj = EvaluationLexicons(args.TARGET_FILE_PATH, args.GOLD_LEXICON_PATH, args.PRED_LEXICON_PATH,\
+        top_k = args.top_k_pred, top_k_gold = args.top_k_pred, filter_freq_less_than = args.filter_freq_less_than)
 
     eval_obj.main()
     
