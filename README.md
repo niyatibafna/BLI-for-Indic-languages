@@ -7,7 +7,7 @@ In this work, we use Hindi as our high-resource language, and automatically crea
 # Data
 
 ## Released lexicons
-Find our (automatically created) lexicons in ``bli/lexicons/<lang>/``, for ``lang``: ``awa``, ``bho``, ``bra``, ``mai``, ``mag``.
+Find our (automatically created) lexicons in ``bli/lexicons/<lang>/``, for ``lang``: ``awa``, ``bho``, ``bra``, ``mai``, ``mag``. While we release lexicons created from every approach, their final versions are prefixed ``basic_final.*``.
 
 Their sizes are as follows:
 
