@@ -1,6 +1,6 @@
 # Introduction
 
-This repository contains the scripts and released lexicons described in the paper [A Simple Method for Unsupervised Bilingual Lexicon Induction for Data-Imbalanced, Closely Related Language Pairs](https://arxiv.org/abs/2305.14012). We present a fast and simple method for Bilingual Lexicon Induction for closely related languages, relying on good quality contextual embeddings in only one of the languages. This scenario is especially applicable to the so-called ''Hindi Belt'', containing 40+ languages and dialects, spoken by 100M+ people in North India. 
+This repository contains the scripts and released lexicons described in our paper, currently under review. We present a fast and simple method for Bilingual Lexicon Induction for closely related languages, relying on good quality contextual embeddings in only one of the languages. This scenario is especially applicable to the so-called ''Hindi Belt'', containing 40+ languages and dialects, spoken by 100M+ people in North India. 
 
 In this work, we use Hindi as our high-resource language, and automatically create lexicons for Bhojpuri, Magahi, Awadhi, Braj, and Maithili. 
 
